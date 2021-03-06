@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="myStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <title>Calculate This</title>
+</head>
+<body>
+    <main id="main-wrapper">
+        <div id="heading-text">
+            <h1>Old School Calculator</h1>
+        </div>
+        <div id="calculator-body">
+            <div id="display">
+                
+            </div>
+            <div id="button-wrapper">
+                <button class="calc-button special"  id="clear">AC</button>
+                <button class="calc-button special" id="change-sign">+/-</button>
+                <button class="calc-button operator" id="power">x^y</button>
+                <button class="calc-button operator" data-key="111"  id="divide">÷</button>
+
+                <button class="calc-button number" data-key="103" id="7">7</button>
+                <button class="calc-button number" data-key="104" id="8">8</button>
+                <button class="calc-button number" data-key="105" id="9">9</button>
+                <button class="calc-button operator" data-key="106"  id="multiply">x</button>
+
+                <button class="calc-button number" data-key="100" id="4">4</button>
+                <button class="calc-button number" data-key="101" id="5">5</button>
+                <button class="calc-button number" data-key="102" id="6">6</button>
+                <button class="calc-button operator" data-key="109"  id="subtract">-</button>
+
+                <button class="calc-button number" data-key="97" id="1">1</button>
+                <button class="calc-button number" data-key="98" id="2">2</button>
+                <button class="calc-button number" data-key="99" id="3">3</button>
+                <button class="calc-button operator" data-key="107"  id="add">+</button>
+
+                <button class="calc-button number" data-key="96" id="zero">0</button>
+                <button class="calc-button number" data-key="110" id="decimal">.</button>
+                <button class="calc-button " data-key="187" id="equals">=</button>
+
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+    function add (num1, num2) {
+	    return num1+num2;
+    }
+
+    function subtract (num1, num2) {
+	    return num1-num2;
+    }
+
+    function sum (array) {
+	    if (array == 0){
+		    return 0;
+	    }
+	    return array.reduce((total, item) => total + item);
+    }
+
+    function multiply (num1, num2) {
+	return num1 * num2;
+    }
+
+    function power(a, b) {
+	    let value = a;
+	    if (b === 0){
+		    return 1;
+	    }else {
+		    for (let i = 1; i < b; i++){
+			    value *= a;
+		    }
+	    }return value;
+    }
+
+    function factorial(num) {
+	    let sum = 1;
+	    if (num === 0) return 1;
+	    for (num; num > 1; num--){
+		    sum *= num;
+	    }
+	    return sum;
+    }
+
+    function divide(num1,num2) {
+        return num1/num2;
+    }
+
+    function operate(operator, num1, num2){
+        switch(operator){
+            case 'add':
+                return add(num1,num2);
+            case 'subtract':
+                return subtract(num1,num2);
+            case 'multiply':
+                return multiply(num1,num2);
+            case 'divide':
+                return divide(num1,num2);
+            case 'power':
+                return power(num1,num2);
+        }
+    }
+
+    const display = document.querySelector('#display');
+    const buttons = Array.from(document.querySelectorAll('button'));
+    let value = 0;
+    let value1 = 0;
+    let displayText = 0;
+    display.textContent = Number(0);
+    let operator;
+
+    function updateDisplay(e){
+        if (e.target.className.includes("number")){
+            if (value == 0){displayText = ''};
+            displayText += e.target.textContent;
+            display.textContent = displayText;
+            value = Number(displayText);
+        }else if (e.target.id == "clear"){
+            value = 0;
+            display.textContent = displayText = Number(0); 
+        }else if (e.target.className.includes("operator")){
+            value1 = Number(display.textContent);
+            operator = e.target.id;
+            console.log(operator);
+            console.log(value1);
+            displayText = '';
+        }else if (e.target.id=="equals"){
+            let displayText = '';
+            console.log(operator);
+            console.log(value1);
+            console.log(value);
+            displayText = operate(operator, value1, value);
+            display.textContent = displayText;
+
+             
+             console.log(displayText);
+        }else if (e.target.id=="change-sign"){
+            displayText = `-${displayText}`;
+            display.textContent = displayText;
+            value = Number(displayText);
+            console.log(displayText);
+        }
+
+    }
+
+    function toTarget (e){
+        number = e.key;
+        updateDisplay(number);
+    }
+    function getKey(e){ console.log(e);};
+    buttons.forEach(button => button.addEventListener('click', updateDisplay));
+    window.addEventListener('keydown', toTarget);
+        
+    
+    </script>
+</body>
